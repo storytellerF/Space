@@ -64,8 +64,12 @@ class WidgetPanelScrollView @JvmOverloads constructor(
     }
 
     override fun requestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
-        val shouldDisallow = disallowIntercept && activeNestedScrollTarget == null
-        super.requestDisallowInterceptTouchEvent(shouldDisallow)
+        // When a child (e.g. drag helper) takes over touch handling, clear the nested
+        // scroll target so the scroll view fully relinquishes interception.
+        if (disallowIntercept) {
+            activeNestedScrollTarget = null
+        }
+        super.requestDisallowInterceptTouchEvent(disallowIntercept)
     }
 
     private fun canTargetScrollWithFinger(target: View, fingerDy: Float): Boolean {

@@ -404,7 +404,7 @@ class WidgetDragHelper(
 
         val view = dragView ?: return false
 
-        when (event.action) {
+        when (event.actionMasked) {
             MotionEvent.ACTION_MOVE -> {
                 cancelEditModeIfMoved(event)
                 autoScrollParentIfNeeded(event)
