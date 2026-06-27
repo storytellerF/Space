@@ -236,7 +236,10 @@ class WidgetCellLayout @JvmOverloads constructor(
         previewRect?.let {
             canvas.drawRect(it, previewPaint)
         }
+    }
 
+    override fun dispatchDraw(canvas: Canvas) {
+        super.dispatchDraw(canvas)
         if (isWidgetEditMode) {
             drawEditControls(canvas)
         }
@@ -489,7 +492,23 @@ class WidgetCellLayout @JvmOverloads constructor(
      * @return true if the region was successfully cleared
      */
     fun pushWidgetsDown(targetX: Int, targetY: Int, spanX: Int, spanY: Int): Boolean {
-        // Collect views that overlap with the target region
+        // Snapshot all children so we can atomically roll back if the push fails partway through.
+        val snapshot = (0 until childCount).mapNotNull { i ->
+            val c = getChildAt(i)
+            val lp = c.layoutParams as? WidgetCellLayoutParams ?: return@mapNotNull null
+            Triple(c, lp.cellX, lp.cellY)
+        }
+        if (pushWidgetsDownInternal(targetX, targetY, spanX, spanY)) return true
+        for ((view, cx, cy) in snapshot) {
+            val lp = view.layoutParams as? WidgetCellLayoutParams ?: continue
+            lp.cellX = cx
+            lp.cellY = cy
+        }
+        rebuildOccupancy()
+        return false
+    }
+
+    private fun pushWidgetsDownInternal(targetX: Int, targetY: Int, spanX: Int, spanY: Int): Boolean {
         val overlapping = mutableListOf<View>()
         for (i in 0 until childCount) {
             val child = getChildAt(i)
@@ -505,30 +524,19 @@ class WidgetCellLayout @JvmOverloads constructor(
 
         if (overlapping.isEmpty()) return true
 
-        // Sort by cellY ascending so we push top ones first
         overlapping.sortBy { (it.layoutParams as WidgetCellLayoutParams).cellY }
 
-        // Try to push each one down
         for (child in overlapping) {
             val lp = child.layoutParams as WidgetCellLayoutParams
             val pushToY = targetY + spanY
-            // Auto-expand grid if pushing would exceed bounds
             expandGridIfNeeded(pushToY + lp.cellVSpan)
-
-            // Temporarily clear the child from occupancy
             occupancy.markCells(lp.cellX, lp.cellY, lp.cellHSpan, lp.cellVSpan, false)
-
-            // Recursively check if that spot is free (may need to push further)
             if (!occupancy.isRegionVacant(lp.cellX, pushToY, lp.cellHSpan, lp.cellVSpan)) {
-                // Try pushing widgets at that new location down too
-                if (!pushWidgetsDown(lp.cellX, pushToY, lp.cellHSpan, lp.cellVSpan)) {
-                    // Can't push, restore and fail
-                    occupancy.markCells(lp.cellX, lp.cellY, lp.cellHSpan, lp.cellVSpan, true)
+                if (!pushWidgetsDownInternal(lp.cellX, pushToY, lp.cellHSpan, lp.cellVSpan)) {
+                    // Don't restore here — outer pushWidgetsDown handles full rollback.
                     return false
                 }
             }
-
-            // Move the widget
             lp.cellY = pushToY
             occupancy.markCells(lp.cellX, pushToY, lp.cellHSpan, lp.cellVSpan, true)
         }
