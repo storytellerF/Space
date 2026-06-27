@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Space</string>
+    <string name="panel_accessibility_service_description">允许 Space 通过桌面下滑手势打开通知面板和控制面板。</string>
+</resources>

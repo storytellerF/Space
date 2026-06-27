@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/popup_background"
+    android:clipToOutline="true"
+    android:minWidth="216dp"
+    android:orientation="vertical"
+    android:padding="6dp">
+
+    <TextView
+        android:id="@+id/btn_add_widget_popup"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@drawable/popup_item_background"
+        android:clickable="true"
+        android:drawableStart="@drawable/ic_add_widget_rounded_24"
+        android:drawablePadding="14dp"
+        android:drawableTint="@color/popup_icon_tint"
+        android:ellipsize="end"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:includeFontPadding="false"
+        android:maxLines="1"
+        android:paddingStart="14dp"
+        android:paddingEnd="16dp"
+        android:text="添加 Widget"
+        android:textColor="@color/popup_text_primary"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/btn_clear_widgets_popup"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@drawable/popup_item_background"
+        android:clickable="true"
+        android:drawableStart="@drawable/ic_delete_rounded_24"
+        android:drawablePadding="14dp"
+        android:drawableTint="@color/popup_danger"
+        android:ellipsize="end"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:includeFontPadding="false"
+        android:maxLines="1"
+        android:paddingStart="14dp"
+        android:paddingEnd="16dp"
+        android:text="清除所有"
+        android:textColor="@color/popup_danger"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/btn_print_widgets_popup"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@drawable/popup_item_background"
+        android:clickable="true"
+        android:drawableStart="@drawable/ic_info_rounded_24"
+        android:drawablePadding="14dp"
+        android:drawableTint="@color/popup_icon_tint"
+        android:ellipsize="end"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:includeFontPadding="false"
+        android:maxLines="1"
+        android:paddingStart="14dp"
+        android:paddingEnd="16dp"
+        android:text="打印信息"
+        android:textColor="@color/popup_text_primary"
+        android:textSize="15sp" />
+
+</LinearLayout>

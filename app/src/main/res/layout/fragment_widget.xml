@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.storyteller_f.space_launcher.widget.WidgetPanelScrollView
+        android:id="@+id/widget_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <com.storyteller_f.space_launcher.widget.WidgetCellLayout
+            android:id="@+id/widget_cell_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp" />
+
+    </com.storyteller_f.space_launcher.widget.WidgetPanelScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_widget_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="20dp"
+        android:contentDescription="Widget 菜单"
+        android:src="@drawable/ic_more_horiz_rounded_24"
+        app:backgroundTint="@color/widget_fab_container"
+        app:elevation="8dp"
+        app:fabCustomSize="56dp"
+        app:hoveredFocusedTranslationZ="10dp"
+        app:pressedTranslationZ="6dp"
+        app:rippleColor="@color/widget_fab_ripple"
+        app:shapeAppearanceOverlay="@style/WidgetMenuFabShapeAppearance"
+        app:tint="@color/widget_fab_icon"
+        app:useCompatPadding="true" />
+
+</FrameLayout>

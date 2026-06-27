@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/popup_background_round"
+    android:clipToOutline="true"
+    android:minWidth="216dp"
+    android:orientation="vertical"
+    android:padding="6dp">
+
+    <TextView
+        android:id="@+id/action_set_wallpaper"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@drawable/popup_item_background"
+        android:drawableStart="@drawable/ic_wallpaper_rounded_24"
+        android:drawablePadding="14dp"
+        android:drawableTint="@color/popup_icon_tint"
+        android:gravity="center_vertical"
+        android:includeFontPadding="false"
+        android:paddingStart="14dp"
+        android:paddingEnd="16dp"
+        android:text="设置壁纸"
+        android:textColor="@color/popup_text_primary"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/action_system_settings"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@drawable/popup_item_background"
+        android:drawableStart="@drawable/ic_settings_rounded_24"
+        android:drawablePadding="14dp"
+        android:drawableTint="@color/popup_icon_tint"
+        android:gravity="center_vertical"
+        android:includeFontPadding="false"
+        android:paddingStart="14dp"
+        android:paddingEnd="16dp"
+        android:text="系统设置"
+        android:textColor="@color/popup_text_primary"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/action_space_settings"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@drawable/popup_item_background"
+        android:drawableStart="@drawable/ic_space_rounded_24"
+        android:drawablePadding="14dp"
+        android:drawableTint="@color/popup_icon_tint"
+        android:gravity="center_vertical"
+        android:includeFontPadding="false"
+        android:paddingStart="14dp"
+        android:paddingEnd="16dp"
+        android:text="Space 设置"
+        android:textColor="@color/popup_text_primary"
+        android:textSize="15sp" />
+
+</LinearLayout>

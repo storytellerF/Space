@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="popup_surface">#211F26</color>
+    <color name="popup_surface_stroke">#33FFFFFF</color>
+    <color name="popup_item_ripple">#2FEADDFF</color>
+    <color name="popup_text_primary">#E6E0E9</color>
+    <color name="popup_text_secondary">#CAC4D0</color>
+    <color name="popup_icon_tint">#D0BCFF</color>
+    <color name="popup_danger">#FFB4AB</color>
+    <color name="app_drawer_panel_background">#DD211F26</color>
+    <color name="widget_fab_container">#4A4458</color>
+    <color name="widget_fab_icon">#EADDFF</color>
+    <color name="widget_fab_ripple">#2FEADDFF</color>
+</resources>
