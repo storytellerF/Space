@@ -682,10 +682,16 @@ class WidgetController(
             // 设置背景以支持点击外部关闭
             setBackgroundDrawable(android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT))
 
-            // 设置显示位置(在按钮上方)
+            // Measure popup before positioning so we get real pixel dimensions, not WRAP_CONTENT (-2).
+            popupView.measure(
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+            )
+            val popupW = popupView.measuredWidth
+            val popupH = popupView.measuredHeight
             val location = IntArray(2)
             anchorView.getLocationOnScreen(location)
-            showAtLocation(anchorView, Gravity.NO_GRAVITY, location[0] + anchorView.width - width, location[1] - height - 16)
+            showAtLocation(anchorView, Gravity.NO_GRAVITY, location[0] + anchorView.width - popupW, location[1] - popupH - 16)
 
             // 点击外部时关闭
             setOnDismissListener {
