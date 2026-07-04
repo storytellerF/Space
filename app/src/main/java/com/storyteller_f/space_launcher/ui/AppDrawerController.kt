@@ -12,7 +12,6 @@ import androidx.core.view.WindowInsetsAnimationCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.marginBottom
 import androidx.core.view.updateLayoutParams
-import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
@@ -89,15 +88,18 @@ class AppDrawerController(
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        // 处理 WindowInsets，确保输入框在软键盘上方
+        val statusBarSpacer = view.findViewById<View>(R.id.status_bar_spacer)
+
+        // 处理 WindowInsets：spacer 高度 = 状态栏高度，留出透明区域显示壁纸；搜索框底部避开导航栏/键盘
         ViewCompat.setOnApplyWindowInsetsListener(view) { _, insets ->
             val statusBarInsets = insets.getInsets(WindowInsetsCompat.Type.statusBars())
             val bottomInsets = insets.getInsets(WindowInsetsCompat.Type.ime() or WindowInsetsCompat.Type.systemBars())
 
-            view.updatePadding(top = statusBarInsets.top)
+            statusBarSpacer.updateLayoutParams<ViewGroup.LayoutParams> {
+                height = statusBarInsets.top
+            }
 
             Log.i(TAG, "onViewCreated: ${bottomInsets.bottom}")
-            // 设置搜索框底部 padding，使其在软键盘上方
             searchInputLayout.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 bottomMargin = baseSearchBottomMargin + bottomInsets.bottom
             }

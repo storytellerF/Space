@@ -3,8 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/app_drawer_panel_background">
+    android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/status_bar_spacer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/panel_background"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/drawer_panel_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/status_bar_spacer" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/app_recycler_view"
@@ -15,7 +32,7 @@
         app:layout_constraintBottom_toTopOf="@+id/search_input_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/status_bar_spacer"
         app:spanCount="4"
         tools:listitem="@layout/item_app" />
 
