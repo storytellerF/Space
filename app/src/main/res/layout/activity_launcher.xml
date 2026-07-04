@@ -9,8 +9,7 @@
         android:id="@+id/drawer_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:translationY="2000dp"
-        android:background="@color/app_drawer_panel_background" />
+        android:translationY="2000dp" />
 
     <FrameLayout
         android:id="@+id/widget_container"

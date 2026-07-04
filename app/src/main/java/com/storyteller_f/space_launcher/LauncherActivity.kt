@@ -1,6 +1,5 @@
 package com.storyteller_f.space_launcher
 
-import android.content.res.Configuration
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
@@ -15,7 +14,6 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.storyteller_f.space_launcher.system.SystemPanel
@@ -54,8 +52,6 @@ class LauncherActivity : FragmentActivity() {
     // 记录抽屉打开时向下拖拽开始时 RecyclerView 是否还能向上滚动
     private var drawerRvCanScrollUp = false
     private var drawerTouchStartedInsideRecyclerView = false
-    private var statusBarLightBeforeDrawer: Boolean? = null
-    private var drawerCoversStatusBar = false
 
 
     var isWidgetDragging = false
@@ -171,54 +167,8 @@ class LauncherActivity : FragmentActivity() {
         animator
             .setDuration(300)
             .setInterpolator(android.view.animation.DecelerateInterpolator())
-            .setUpdateListener {
-                if (panel == Panel.DRAWER) {
-                    updateAppPanelStatusBarAppearanceForPosition()
-                }
-            }
-            .withEndAction {
-                panelState = end
-                if (panel == Panel.DRAWER) {
-                    updateAppPanelStatusBarAppearanceForPosition()
-                }
-            }
+            .withEndAction { panelState = end }
             .start()
-    }
-
-    private fun applyAppPanelStatusBarAppearance() {
-        val controller = WindowCompat.getInsetsController(window, window.decorView)
-        if (statusBarLightBeforeDrawer == null) {
-            statusBarLightBeforeDrawer = controller.isAppearanceLightStatusBars
-        }
-        controller.isAppearanceLightStatusBars = shouldUseLightStatusBarForAppPanel()
-    }
-
-    private fun restoreStatusBarAppearanceAfterDrawer() {
-        val previous = statusBarLightBeforeDrawer ?: return
-        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = previous
-        statusBarLightBeforeDrawer = null
-    }
-
-    private fun updateAppPanelStatusBarAppearanceForPosition() {
-        val coversStatusBar = drawerContainer.translationY <= getStatusBarTopInset().toFloat()
-        if (coversStatusBar == drawerCoversStatusBar) return
-
-        drawerCoversStatusBar = coversStatusBar
-        if (coversStatusBar) {
-            applyAppPanelStatusBarAppearance()
-        } else {
-            restoreStatusBarAppearanceAfterDrawer()
-        }
-    }
-
-    private fun getStatusBarTopInset(): Int {
-        val insets = ViewCompat.getRootWindowInsets(mainContainer) ?: return 0
-        return insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
-    }
-
-    private fun shouldUseLightStatusBarForAppPanel(): Boolean {
-        val nightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        return nightMode != Configuration.UI_MODE_NIGHT_YES
     }
 
     fun closeWidgetPanel() {
@@ -254,7 +204,6 @@ class LauncherActivity : FragmentActivity() {
                 val currentY = drawerContainer.translationY.coerceIn(0f, height)
                 val shouldOpen = currentY < height / 2f
                 drawerContainer.translationY = if (shouldOpen) 0f else height
-                updateAppPanelStatusBarAppearanceForPosition()
                 panelState = if (shouldOpen) {
                     PanelState.Opened(Panel.DRAWER)
                 } else {
@@ -463,7 +412,6 @@ class LauncherActivity : FragmentActivity() {
                     if (targetTransY > screenHeight) targetTransY = screenHeight
 
                     drawerContainer.translationY = targetTransY
-                    updateAppPanelStatusBarAppearanceForPosition()
                     return true // Consume event
                 } else if (isHorizontalDragging) {
                     var targetTransX = if (widgetDragStartFromOpen) dx else -screenWidth + dx
