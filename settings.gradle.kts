@@ -24,4 +24,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Space"
 include(":app")
+include(":test-widgets")
  

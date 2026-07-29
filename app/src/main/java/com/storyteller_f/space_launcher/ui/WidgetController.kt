@@ -22,6 +22,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -65,7 +66,11 @@ class WidgetController(
     private val cellLayoutEvents = MutableSharedFlow<Int>(replay = 1, extraBufferCapacity = 1)
 
     data class ActivityResultEvent(val requestCode: Int, val resultCode: Int, val data: Intent?)
-    private val activityResultFlow = MutableSharedFlow<ActivityResultEvent>(extraBufferCapacity = 1)
+    private data class PendingActivityResult(
+        val requestCode: Int,
+        val deferred: CompletableDeferred<ActivityResultEvent>
+    )
+    private var pendingActivityResult: PendingActivityResult? = null
     
     private val settingsChangeReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -353,8 +358,9 @@ class WidgetController(
                     putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
                     putExtra(AppWidgetManager.EXTRA_APPWIDGET_PROVIDER, info.provider)
                 }
-                activity.startActivityForResult(intent, REQUEST_BIND_APPWIDGET)
-                val result = activityResultFlow.first { it.requestCode == REQUEST_BIND_APPWIDGET }
+                val result = awaitActivityResult(REQUEST_BIND_APPWIDGET) {
+                    activity.startActivityForResult(intent, REQUEST_BIND_APPWIDGET)
+                }
                 result.resultCode == Activity.RESULT_OK
             } else true
 
@@ -368,14 +374,15 @@ class WidgetController(
             val configured = if (info.configure != null) {
                 try {
                     pendingAddWidgetId = appWidgetId
-                    appWidgetHost.startAppWidgetConfigureActivityForResult(
-                        activity,
-                        appWidgetId,
-                        0,
-                        REQUEST_CREATE_APPWIDGET,
-                        null
-                    )
-                    val result = activityResultFlow.first { it.requestCode == REQUEST_CREATE_APPWIDGET }
+                    val result = awaitActivityResult(REQUEST_CREATE_APPWIDGET) {
+                        appWidgetHost.startAppWidgetConfigureActivityForResult(
+                            activity,
+                            appWidgetId,
+                            0,
+                            REQUEST_CREATE_APPWIDGET,
+                            null
+                        )
+                    }
                     result.resultCode == Activity.RESULT_OK
                 } catch (e: Exception) {
                     appWidgetHost.deleteAppWidgetId(appWidgetId)
@@ -410,7 +417,27 @@ class WidgetController(
         }
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        activityResultFlow.tryEmit(ActivityResultEvent(requestCode, resultCode, data))
+        val pendingResult = pendingActivityResult ?: return
+        if (pendingResult.requestCode == requestCode && pendingResult.deferred.isActive) {
+            pendingResult.deferred.complete(ActivityResultEvent(requestCode, resultCode, data))
+        }
+    }
+
+    private suspend fun awaitActivityResult(
+        requestCode: Int,
+        startActivity: () -> Unit
+    ): ActivityResultEvent {
+        val result = CompletableDeferred<ActivityResultEvent>()
+        val pendingResult = PendingActivityResult(requestCode, result)
+        pendingActivityResult = pendingResult
+        return try {
+            startActivity()
+            result.await()
+        } finally {
+            if (pendingActivityResult === pendingResult) {
+                pendingActivityResult = null
+            }
+        }
     }
 
     fun isWidgetEditMode(): Boolean {

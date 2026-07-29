@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="widget_simple_bg">#1E6F5C</color>
+    <color name="widget_small_bg">#625B71</color>
+    <color name="widget_large_bg">#8A5800</color>
+    <color name="widget_configurable_bg">#3F5F8A</color>
+    <color name="widget_resize_bg">#6B4E71</color>
+    <color name="widget_text">#FFFFFFFF</color>
+</resources>

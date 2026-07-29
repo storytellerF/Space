@@ -5,6 +5,7 @@ on:
     branches: [ "main" ]
     paths:
       - 'app/**'
+      - 'test-widgets/**'
       - '**/*.gradle.kts'
       - 'gradle/libs.versions.toml'
       - 'gradle/wrapper/**'
@@ -23,7 +24,9 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-          cache: gradle
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Enable KVM
         run: |

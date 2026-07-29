@@ -66,4 +66,9 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.uiautomator)
+}
+
+tasks.matching { it.name == "connectedDebugAndroidTest" }.configureEach {
+    dependsOn(":test-widgets:installDebug")
 }

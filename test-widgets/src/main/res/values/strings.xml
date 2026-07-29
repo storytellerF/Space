@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Space Test Widgets</string>
+    <string name="widget_simple_label">Space Test Simple Widget</string>
+    <string name="widget_small_label">Space Test Small Widget</string>
+    <string name="widget_large_label">Space Test Large Widget</string>
+    <string name="widget_configurable_label">Space Test Configurable Widget</string>
+    <string name="widget_resize_aware_label">Space Test Resize Aware Widget</string>
+    <string name="config_title">Configure Test Widget</string>
+    <string name="config_done">Done</string>
+</resources>
