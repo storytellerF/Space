@@ -8,6 +8,7 @@ import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.PopupWindow
 import android.widget.Toast
@@ -27,7 +28,7 @@ class LauncherActivity : FragmentActivity() {
 
     private lateinit var drawerContainer: FrameLayout
     private lateinit var widgetContainer: FrameLayout
-    private lateinit var mainContainer: FrameLayout
+    private lateinit var mainContainer: ViewGroup
     private lateinit var appDrawerController: AppDrawerController
     private lateinit var widgetController: WidgetController
     private lateinit var systemPanelController: SystemPanelController
@@ -305,7 +306,8 @@ class LauncherActivity : FragmentActivity() {
         velocityTracker?.addMovement(ev)
 
         val screenHeight = drawerContainer.height.toFloat()
-        val screenWidth = widgetContainer.width.toFloat()
+        val screenWidth = mainContainer.width.toFloat()
+        val widgetPanelWidth = widgetContainer.width.toFloat()
 
         when (ev.action) {
             MotionEvent.ACTION_DOWN -> {
@@ -414,8 +416,8 @@ class LauncherActivity : FragmentActivity() {
                     drawerContainer.translationY = targetTransY
                     return true // Consume event
                 } else if (isHorizontalDragging) {
-                    var targetTransX = if (widgetDragStartFromOpen) dx else -screenWidth + dx
-                    if (targetTransX < -screenWidth) targetTransX = -screenWidth
+                    var targetTransX = if (widgetDragStartFromOpen) dx else -widgetPanelWidth + dx
+                    if (targetTransX < -widgetPanelWidth) targetTransX = -widgetPanelWidth
                     if (targetTransX > 0) targetTransX = 0f
                     widgetContainer.translationX = targetTransX
                     return true
