@@ -1,5 +1,3 @@
-<a id="development"></a>
-
 # 开发指南
 
 使用 JDK 21 和 Android SDK Platform 37 构建。AndroidX Core 1.19.1 要求 API 37，因此应用使用 API 37 编译，target SDK 也是 37，minimum SDK 保持 33。Wrapper 使用 Gradle 9.8.2。
