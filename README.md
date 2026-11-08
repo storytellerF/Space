@@ -1,3 +1,3 @@
 # Space
 
-See [DEVELOPMENT.md](DEVELOPMENT.md) for build requirements and test commands.
+构建要求和测试命令见 [DEVELOPMENT.md](DEVELOPMENT.md)。
